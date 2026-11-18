@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SD Muhammadiyah 3 Surakarta</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="../image/cropped-1666147482635.png?v=2"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <!-- 🔹 Navbar -->
+    <div
+      class="navbar bg-base-100 fixed top-0 z-50 w-full shadow-lg transition-colors duration-300"
+      id="navbar"
+    >
+      <!-- Kiri: Logo -->
+      <div class="navbar-start">
+        <a
+          href="../index.html"
+          class="btn btn-ghost flex items-center gap-2 text-xl normal-case"
+        >
+          <img
+            src="../image/cropped-1666147482635.png"
+            alt="SD Muhammadiyah 3"
+            class="h-8 w-8"
+          />
+          <span class="hidden sm:inline">SD Muhammadiyah 3</span>
+        </a>
+      </div>
+
+      <!-- Tengah: Menu (responsive toggle) -->
+      <div class="navbar-center">
+        <details class="dropdown lg:hidden">
+          <summary class="btn">☰</summary>
+          <ul
+            class="menu dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 z-[1]"
+          >
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="Profil.html">Profil Sekolah</a></li>
+            <li><a href="../sejarah.html">Sejarah</a></li>
+            <li>
+              <a href="../ekstrakurikuler/ekstra.html">Ekstrakurikuler</a>
+            </li>
+            <li><a href="../biodata.html">Biodata Programmer</a></li>
+          </ul>
+        </details>
+
+        <ul class="menu menu-horizontal px-1 hidden lg:flex">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="Profil.html">Profil Sekolah</a></li>
+          <li><a href="../sejarah.html">Sejarah</a></li>
+          <li><a href="../ekstrakurikuler/ekstra.html">Ekstrakurikuler</a></li>
+          <li><a href="../biodata.html">Biodata Programmer</a></li>
+        </ul>
+      </div>
+
+      <!-- Kanan: Dropdown User -->
+      <div class="navbar-end">
+        <div class="dropdown dropdown-end" id="userDropdownContainer">
+          <label
+            tabindex="0"
+            id="userDisplay"
+            class="btn normal-case m-1 hidden flex items-center gap-2"
+          >
+            <span id="usernameText"></span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+              />
+            </svg>
+          </label>
+
+          <ul
+            tabindex="0"
+            class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+            id="userMenu"
+          >
+            <li>
+              <p class="text-sm text-gray-500" id="loginTimeDisplay"></p>
+            </li>
+            <li>
+              <button
+                id="logoutBtn"
+                class="btn btn-error btn-sm"
+                onclick="logout()"
+              >
+                Logout
+              </button>
+            </li>
+            <li>
+              <button
+                id="deleteDataBtn"
+                class="btn btn-warning btn-sm"
+                onclick="deleteDatabase()"
+              >
+                Hapus Data Akun
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Login -->
+    <dialog id="loginModal" class="modal">
+      <div class="modal-box">
+        <h3 class="mb-4 text-center text-lg font-bold">Login</h3>
+        <form id="formLogin" class="space-y-4">
+          <input
+            type="text"
+            id="loginUsername"
+            placeholder="Username"
+            class="input input-bordered w-full"
+            required
+          />
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+            class="input input-bordered w-full"
+            required
+          />
+          <button type="submit" class="btn btn-primary w-full">Login</button>
+        </form>
+        <p id="loginStatus" class="text-error mt-2 text-sm text-center"></p>
+        <p class="mt-2 text-center text-sm">
+          Belum punya akun?
+          <a href="#" onclick="switchModal()" class="text-blue-700"
+            >Daftar di sini</a
+          >
+        </p>
+      </div>
+    </dialog>
+
+    <!-- Modal Daftar -->
+    <dialog id="registerModal" class="modal">
+      <div class="modal-box">
+        <h3 class="mb-4 text-lg font-bold text-center">Daftar Akun</h3>
+        <form id="formRegister" class="space-y-4">
+          <input
+            type="text"
+            id="regUsername"
+            placeholder="Username Baru"
+            class="input input-bordered w-full"
+            required
+          />
+          <input
+            type="password"
+            id="regPassword"
+            placeholder="Password Baru"
+            class="input input-bordered w-full"
+            required
+          />
+          <button type="submit" class="btn btn-success w-full">Daftar</button>
+        </form>
+        <p id="registerStatus" class="text-error mt-2 text-sm text-center"></p>
+        <p class="mt-2 text-center text-sm">
+          Sudah punya akun?
+          <a href="#" onclick="switchModal(true)">Login di sini</a>
+        </p>
+      </div>
+    </dialog>
+    <!--background-->
+    <div class="hero relative h-screen w-full overflow-hidden">
+      <!-- Background -->
+      <div class="absolute inset-0">
+        <img
+          src="../image/background.webp"
+          alt="Background SD Muhammadiyah 3 Surakarta"
+          class="h-full w-full object-cover"
+        />
+      </div>
+
+      <!-- Lapisan samar (efek blur + transparan) -->
+      <div class="absolute inset-0 bg-base-100/30 backdrop-blur-lg"></div>
+
+      <!-- Konten utama -->
+      <div
+        class="hero-content relative z-20 flex h-full items-center justify-center"
+      >
+        <div class="container mx-auto px-4 text-center">
+          <h1
+            class="text-base-100 mb-6 text-5xl font-bold md:text-7xl drop-shadow-lg"
+          >
+            SD Muhammadiyah 3 Surakarta
+          </h1>
+
+          <div class="flex flex-col justify-center gap-4 md:flex-row">
+            <img
+              src="../image/cropped-1666147482635.png"
+              alt="Logo SD Muhammadiyah 3 Surakarta"
+              class="mx-auto w-40 md:w-52 drop-shadow-lg"
+            />
+          </div>
+
+          <p
+            class="text-base-200 mx-auto mb-8 mt-4 max-w-3xl text-xl md:text-2xl drop-shadow-md"
+          >
+            Jalan Singasari Utara 1/13, Nusukan, Banjarsari, Surakarta 57135
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- ===== SAMBUTAN KEPALA SEKOLAH ===== -->
+    <section
+      class="relative bg-gradient-to-r from-blue-900 via-sky-800 to-blue-700 text-white py-10 px-6 rounded-3xl shadow-xl overflow-hidden my-10"
+      data-aos="fade-up"
+    >
+      <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+        <!-- Teks Sambutan -->
+        <div class="space-y-4 relative z-10" data-aos="fade-right">
+          <h2 class="text-2xl md:text-3xl font-bold mb-3">
+            Sambutan Kepala Sekolah
+          </h2>
+          <p class="leading-relaxed text-base md:text-lg text-blue-50">
+            Assalamu’alaikum warahmatullahi wabarakatuh.<br /><br />
+            Selamat datang di website resmi
+            <strong>SD Muhammadiyah 3 Surakarta</strong>. Kami berkomitmen
+            menciptakan sekolah dasar yang unggul dan berkarakter dengan
+            menyeimbangkan <em>Imtaq</em> (Iman dan Taqwa) serta
+            <em>Iptek</em> (Ilmu Pengetahuan dan Teknologi). <br /><br />
+            Dengan semangat keislaman, kebangsaan, dan kedisiplinan, kami terus
+            berupaya membentuk generasi berakhlak mulia, kreatif, dan mandiri.
+          </p>
+          <div class="text-right mt-4">
+            <p class="font-semibold text-base md:text-lg">
+              Bibit Wahyono, S.Pd
+            </p>
+            <p class="text-blue-100 text-sm md:text-base">
+              Kepala SD Muhammadiyah 3 Surakarta
+            </p>
+          </div>
+        </div>
+
+        <!-- Foto Kepala Sekolah -->
+        <div
+          class="flex justify-center md:justify-end relative"
+          data-aos="fade-left"
+        >
+          <div class="relative">
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-sky-500 to-transparent rounded-3xl blur-2xl opacity-60"
+            ></div>
+            <img
+              src="../image/Desain tanpa judul.png"
+              alt="Kepala Sekolah"
+              class="relative z-10 rounded-2xl w-56 md:w-64 lg:w-72 object-cover shadow-lg transform hover:scale-105 transition duration-300 ease-out"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== VISI, MISI, DAN TUJUAN ===== -->
+    <section
+      class="py-20 bg-gradient-to-b from-blue-50 to-sky-100 rounded-3xl shadow-inner"
+      data-aos="fade-up"
+    >
+    <!-- Background Blur -->
+      <div class="absolute inset-0">
+        <img
+          src="../image/background.webp"
+          alt="Background Blur"
+          class="w-full h-full object-cover filter blur-md opacity-60"
+        />
+      </div>
+      <div class="max-w-6xl mx-auto px-6">
+        <h2
+          class="text-4xl font-extrabold text-center text-gray-800 mb-12"
+          data-aos="zoom-in"
+        >
+          Visi, Misi & Tujuan Sekolah
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-10">
+          <!-- Kolom Visi & Tujuan -->
+          <div
+            class="bg-white/60 backdrop-blur-xl rounded-3xl shadow-lg p-8 border border-white/40 hover:shadow-2xl transition duration-300"
+            data-aos="fade-right"
+          >
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Visi Sekolah</h3>
+            <p
+              class="italic text-gray-700 bg-white/70 rounded-xl p-4 shadow-sm"
+            >
+              “Menuju lembaga pendidikan yang profesional menghasilkan pribadi
+              muslim yang berkualitas, mandiri, dan percaya diri.”
+            </p>
+
+            <h3 class="text-2xl font-bold text-gray-800 mt-8 mb-4">
+              Tujuan Sekolah
+            </h3>
+            <ul class="list-disc list-inside text-gray-700 space-y-2">
+              <li>
+                Mencetak peserta didik berkepribadian Islami dan berkarakter
+                unggul.
+              </li>
+              <li>Menumbuhkan sikap mandiri, kreatif, dan percaya diri.</li>
+              <li>
+                Membentuk lembaga pendidikan yang profesional dan terpercaya.
+              </li>
+              <li>
+                Mengembangkan potensi peserta didik berbasis <em>Imtaq</em> dan
+                <em>Iptek</em>.
+              </li>
+            </ul>
+          </div>
+
+          <!-- Kolom Misi -->
+          <div
+            class="bg-white/60 backdrop-blur-xl rounded-3xl shadow-lg p-8 border border-white/40 hover:shadow-2xl transition duration-300"
+            data-aos="fade-left"
+          >
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Misi Sekolah</h3>
+            <ul class="list-disc list-inside text-gray-700 space-y-3">
+              <li>
+                Menyelenggarakan pendidikan berbasis nilai Islam dan karakter
+                bangsa.
+              </li>
+              <li>
+                Mengembangkan manajemen sekolah yang transparan dan profesional.
+              </li>
+              <li>
+                Melaksanakan pembelajaran aktif, kreatif, efektif, dan
+                menyenangkan.
+              </li>
+              <li>
+                Meningkatkan kerja sama dengan masyarakat dalam pengembangan
+                mutu pendidikan.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--login script-->
+    <script>
+      function switchModal(toLogin = false) {
+        document.getElementById("loginModal").close();
+        document.getElementById("registerModal").close();
+        if (toLogin) document.getElementById("loginModal").showModal();
+        else document.getElementById("registerModal").showModal();
+      }
+
+      // ✅ Saat halaman dibuka, cek apakah user sudah login
+      window.addEventListener("load", () => {
+        const loggedUser = sessionStorage.getItem("username");
+        const waktuLogin = sessionStorage.getItem("waktuLogin");
+        if (loggedUser) {
+          showUserInfo(loggedUser, waktuLogin);
+        } else {
+          document.getElementById("loginModal").showModal();
+        }
+      });
+
+      // 🔹 Register
+      document
+        .getElementById("formRegister")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const username = document.getElementById("regUsername").value.trim();
+          const password = document.getElementById("regPassword").value;
+
+          fetch("../register.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `username=${encodeURIComponent(
+              username
+            )}&password=${encodeURIComponent(password)}`,
+          })
+            .then((res) => res.text())
+            .then((data) => {
+              if (data === "EXISTS")
+                document.getElementById("registerStatus").textContent =
+                  "❌ Username sudah digunakan.";
+              else if (data === "SUCCESS") {
+                document.getElementById("registerStatus").textContent =
+                  "✅ Pendaftaran berhasil! Silakan login.";
+                switchModal(true);
+              } else
+                document.getElementById("registerStatus").textContent =
+                  "⚠️ Terjadi kesalahan server.";
+            })
+            .catch(() => {
+              document.getElementById("registerStatus").textContent =
+                "⚠️ Gagal terhubung ke server.";
+            });
+        });
+
+      // 🔹 Login
+      document
+        .getElementById("formLogin")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const user = document.getElementById("loginUsername").value;
+          const pass = document.getElementById("loginPassword").value;
+
+          fetch("../login.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `username=${encodeURIComponent(
+              user
+            )}&password=${encodeURIComponent(pass)}`,
+          })
+            .then((res) => res.text())
+            .then((data) => {
+              if (data.startsWith("SUCCESS")) {
+                // Ambil waktu login dari PHP
+                const waktu = data.split("|")[1] || new Date().toLocaleString();
+                sessionStorage.setItem("username", user);
+                sessionStorage.setItem("waktuLogin", waktu);
+                document.getElementById("loginModal").close();
+                showUserInfo(user, waktu);
+              } else if (data === "WRONG")
+                document.getElementById("loginStatus").innerText =
+                  "❌ Password salah!";
+              else if (data === "NOT_FOUND")
+                document.getElementById("loginStatus").innerText =
+                  "❌ Akun tidak ditemukan!";
+              else
+                document.getElementById("loginStatus").innerText =
+                  "⚠️ Kesalahan server.";
+            })
+            .catch(() => {
+              document.getElementById("loginStatus").innerText =
+                "⚠️ Tidak dapat terhubung ke server.";
+            });
+        });
+
+      // 🔹 Info User
+      function showUserInfo(username, waktuLogin) {
+        const userDisplay = document.getElementById("userDisplay");
+        const usernameText = document.getElementById("usernameText");
+        const loginTimeDisplay = document.getElementById("loginTimeDisplay");
+        const dropdownContainer = document.getElementById(
+          "userDropdownContainer"
+        );
+
+        const waktu = waktuLogin || new Date().toLocaleString();
+
+        usernameText.textContent = `👤 ${username}`;
+        loginTimeDisplay.textContent = `Login: ${waktu}`;
+
+        // tampilkan dropdown user
+        userDisplay.classList.remove("hidden");
+        dropdownContainer.classList.remove("hidden");
+      }
+
+      // 🔹 Logout
+      function logout() {
+        sessionStorage.removeItem("username");
+        sessionStorage.removeItem("waktuLogin");
+        alert("Logout berhasil!");
+        location.reload();
+      }
+
+      // 🔹 Hapus Akun
+      function deleteDatabase() {
+        alert(
+          "Data akun di database tidak bisa dihapus lewat browser ini. Gunakan phpMyAdmin."
+        );
+      }
+    </script>
+    <!--footer-->
+    <footer class="bg-blue-200 mt-10 py-10">
+      <div
+        class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10 items-start"
+      >
+        <!-- Kiri: Info Sekolah -->
+        <div>
+          <h3 class="text-xl font-bold text-blue-700 mb-2">
+            SD Muhammadiyah 3 Surakarta
+          </h3>
+          <p class="text-gray-600 mb-2">
+            Jalan Singasari Utara 1/13, Nusukan,<br />
+            Banjarsari, Surakarta 57135
+          </p>
+          <p class="text-gray-600 mb-4">Telepon: 0812-3456-7890</p>
+
+          <div class="text-xl font-bold text-blue-700 mb-2">
+            <h4>Ikuti Kami</h4>
+            <br />
+            <div class="social-links">
+              <a
+                href="https://web.facebook.com/profile.php?id=100063221559711"
+                target="_blank"
+                aria-label="Facebook"
+              >
+                <img src="../image/icons/facebook.png" alt="Facebook" />
+              </a>
+              <a
+                href="https://www.instagram.com/sdmuh3surakarta?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                target="_blank"
+                aria-label="Instagram"
+              >
+                <img src="../image/icons/instagram.png" alt="Instagram" />
+              </a>
+              <a
+                href="https://youtube.com/@mugaskatv7681?si=10egqL2AxE7pqTCF"
+                target="_blank"
+                aria-label="YouTube"
+              >
+                <img src="../image/icons/youtube.png" alt="YouTube" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kanan: Komentar Pengguna -->
+        <div class="bg-white p-6 rounded-2xl shadow-xl">
+          <h2 class="text-xl font-bold text-blue-700 text-center mb-3">
+            💬 Komentar Pengguna
+          </h2>
+          <form id="komentarForm">
+            <input
+              type="text"
+              id="nama"
+              placeholder="Nama (harus sama dengan username login)"
+              class="input input-bordered w-full mb-3 bg-blue-50"
+              required
+            />
+            <textarea
+              id="komentar"
+              placeholder="Tulis komentar Anda..."
+              class="textarea textarea-bordered w-full mb-3"
+              required
+            ></textarea>
+            <button
+              type="submit"
+              class="btn w-full bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              Kirim Komentar
+            </button>
+          </form>
+
+          <div id="daftarKomentar" class="mt-4 text-center text-gray-500">
+            Memuat komentar...
+          </div>
+        </div>
+      </div>
+
+      <!-- Garis pemisah + copyright tengah -->
+      <div
+        class="mt-10 border-t border-gray-300 pt-4 text-center text-gray-500"
+      >
+        © 2025 SD Muhammadiyah 3 Surakarta. All Rights Reserved.
+      </div>
+    </footer>
+    <!--script komentar-->
+    <script>
+      // 🔹 Kirim komentar
+      document
+        .getElementById("komentarForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const nama = document.getElementById("nama").value.trim();
+          const komentar = document.getElementById("komentar").value.trim();
+
+          if (!nama || !komentar) {
+            alert("Nama dan komentar harus diisi!");
+            return;
+          }
+
+          const response = await fetch("../komentar.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nama, komentar }),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            alert("Komentar berhasil dikirim!");
+            document.getElementById("komentarForm").reset();
+            loadKomentar(); // refresh daftar komentar
+          } else {
+            alert(result.error || "Gagal mengirim komentar!");
+          }
+        });
+
+      // 🔹 Ambil komentar
+      async function loadKomentar() {
+        const res = await fetch("../ambil_komentar.php");
+        const data = await res.json();
+
+        const container = document.getElementById("daftarKomentar");
+
+        if (data.length > 0) {
+          container.innerHTML = data
+            .map(
+              (item) => `
+        <div class="border p-3 my-2 rounded-xl text-left">
+          <b>${item.username}</b><br />
+          <p>${item.komentar}</p>
+        </div>`
+            )
+            .join("");
+        } else {
+          container.textContent = "Belum ada komentar.";
+        }
+      }
+
+      loadKomentar();
+    </script>
+
+    <div id="daftarKomentar" class="mt-4 text-center text-gray-500"></div>
+
+    <script>
+      async function loadKomentar() {
+        const res = await fetch("../ambil_komentar.php");
+        const data = await res.json();
+
+        if (data.length > 0) {
+          document.getElementById("daftarKomentar").innerHTML = data
+            .map(
+              (item) => `
+        <div class="border p-3 my-2 rounded-xl text-left">
+          <b>${item.username}</b><br>
+          <p>${item.komentar}</p>
+        </div>`
+            )
+            .join("");
+        } else {
+          document.getElementById("daftarKomentar").textContent =
+            "Belum ada komentar.";
+        }
+      }
+      loadKomentar();
+    </script>
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 1000, // Durasi animasi (ms)
+        once: true, // Animasi hanya muncul sekali
+        offset: 100, // Jarak sebelum animasi dimulai
+      });
+    </script>
+  </body>
+</html>

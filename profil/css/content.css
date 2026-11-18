@@ -1,0 +1,60 @@
+.sambutan, .berita, .galeri {
+    padding: 50px 80px;
+    background: white;
+    margin-top: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.sambutan {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    background-color: rgb(77, 110, 209);
+}
+.sambutan img {
+    width: 200px;
+    border-radius: 10px;
+}
+/* --- Fix sambutan agar tidak crash di HP --- */
+.sambutan {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+  background-color: rgb(77, 110, 209);
+  color: white;
+  flex-wrap: wrap;
+}
+
+.sambutan img {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* RESPONSIVE FIX UNTUK HP */
+@media (max-width: 768px) {
+  .sambutan {
+    flex-direction: column; /* teks di atas, gambar di bawah */
+    align-items: center; /* gambar & teks di tengah */
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  .sambutan-text {
+    width: 100%;
+  }
+
+  .sambutan img {
+    margin-top: 20px;
+    width: 70%;       /* biar proporsional di HP */
+    max-width: 250px; /* batasi ukuran maksimum */
+  }
+
+  .sambutan-text p[align="right"] {
+    text-align: center; /* tandatangan ke tengah */
+  }
+}
+
